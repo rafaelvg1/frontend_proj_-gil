@@ -47,16 +47,10 @@ def header():
             <div class="logo">INSPER PAY</div>
             <input type="text" class="search-bar" placeholder="Pesquisar produtos...">
             <div class="buttons-container">
-                <button class="btn" onclick="document.getElementById('login-btn').click();">Login</button>
-                <button class="btn" onclick="document.getElementById('register-btn').click();">Cadastro</button>
+                <button class="btn" onclick="window.location.href='?page=Login'">Login</button>
+                <button class="btn" onclick="window.location.href='?page=Cadastro'">Cadastro</button>
             </div>
         </div>
-        <form action="" method="POST" id="login-btn">
-            <input type="hidden" name="page" value="Login">
-        </form>
-        <form action="" method="POST" id="register-btn">
-            <input type="hidden" name="page" value="Cadastro">
-        </form>
         """,
         unsafe_allow_html=True
     )
@@ -174,10 +168,10 @@ def register_page():
 if "page" not in st.session_state:
     st.session_state["page"] = "Main"
 
-# Verificando o valor do formulário enviado para mudar a página
-if st.experimental_get_query_params().get("page"):
-    page_param = st.experimental_get_query_params()["page"][0]
-    st.session_state["page"] = page_param
+# Verifica o parâmetro de URL para navegar entre páginas
+query_params = st.query_params
+if "page" in query_params:
+    st.session_state["page"] = query_params["page"][0]
 
 # Renderização das páginas com base no estado atual
 if st.session_state["page"] == "Main":

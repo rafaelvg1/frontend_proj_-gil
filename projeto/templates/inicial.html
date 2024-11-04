@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insper Pay</title>
+    <link rel="stylesheet" href="static/inicial.css">
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <div class="header-container">
+        <div class="logo">INSPER PAY</div>
+        <input type="text" class="search-bar" placeholder="Pesquisar produtos...">
+        <div class="buttons-container">
+            <button onclick="openModal()" class="btn">Login</button>
+            <button onclick="openModalCadastro()" class="btn">Cadastro</button>
+        </div>
+    </div>
+
+    <!-- Seção de Categorias -->
+    <div class="category-section">
+        <h3>Categorias</h3>
+        <div class="category-buttons">
+            <div class="category-button">Pratos</div>
+            <div class="category-button">Bebidas</div>
+            <div class="category-button">Sobremesas</div>
+            <div class="category-button">Combos</div>
+        </div>
+    </div>
+
+    <!-- Seção de Destaques -->
+    <div class="highlight-section">
+        <h3>Destaques</h3>
+        <div class="highlight-cards">
+            <div class="highlight-card">
+                <img src="https://via.placeholder.com/150" alt="Produto">
+                <h4>Produto Exemplo 1</h4>
+                <button>Ver detalhes</button>
+            </div>
+            <div class="highlight-card">
+                <img src="https://via.placeholder.com/150" alt="Produto">
+                <h4>Produto Exemplo 2</h4>
+                <button>Ver detalhes</button>
+            </div>
+            <div class="highlight-card">
+                <img src="https://via.placeholder.com/150" alt="Produto">
+                <h4>Produto Exemplo 3</h4>
+                <button>Ver detalhes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3>Acesse sua conta</h3>
+            <input type="text" placeholder="Usuário">
+            <input type="password" placeholder="Senha">
+            <button class="close-btn" onclick="closeModal()">Entrar</button>
+            <br><br>
+            <button class="close-btn" onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h3>Crie sua conta</h3>
+            <input type="text" placeholder="Escolha um Usuário">
+            <input type="password" placeholder="Escolha uma Senha">
+            <button class="close-btn" onclick="closeModalCadastro()">Cadastrar</button>
+            <br><br>
+            <button class="close-btn" onclick="closeModalCadastro()">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        // Função para abrir o modal de login
+        function openModal() {
+            document.getElementById("loginModal").style.display = "flex";
+        }
+
+        // Função para fechar o modal de login
+        function closeModal() {
+            document.getElementById("loginModal").style.display = "none";
+        }
+
+        // Função para abrir o modal de cadastro
+        function openModalCadastro() {
+            document.getElementById("registerModal").style.display = "flex";
+        }
+
+        // Função para fechar o modal de cadastro
+        function closeModalCadastro() {
+            document.getElementById("registerModal").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
+
+

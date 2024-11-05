@@ -5,6 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insper Pay</title>
     <link rel="stylesheet" href="static/inicial.css">
+    <style>
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8;
+        }
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+        }
+        .cart-button {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .cart-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+        .modal {
+            display: none; /* Oculta os modais por padrão */
+            position: fixed;
+            z-index: 1; /* Coloca o modal acima de outros elementos */
+            left: 0;
+            top: 0;
+            width: 100%; /* Largura total */
+            height: 100%; /* Altura total */
+            overflow: auto; /* Permite rolagem se necessário */
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com transparência */
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto; /* Centraliza o modal */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px; /* Largura do modal */
+        }
+    </style>
 </head>
 <body>
 
@@ -15,6 +56,9 @@
         <div class="buttons-container">
             <button onclick="openModal()" class="btn">Login</button>
             <button onclick="openModalCadastro()" class="btn">Cadastro</button>
+            <div class="cart-button" onclick="openCartModal()">
+                <img src="https://via.placeholder.com/20" alt="Carrinho" class="cart-icon"> Carrinho
+            </div>
         </div>
     </div>
 
@@ -75,6 +119,18 @@
         </div>
     </div>
 
+    <!-- Modal do Carrinho -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <h3>Produtos no Carrinho</h3>
+            <div id="cartItems">
+                <p>Nenhum produto adicionado ao carrinho.</p>
+            </div>
+            <button class="close-btn" onclick="closeCartModal()">Fechar</button>
+            <button class="finalize-btn" onclick="finalizeOrder()">Finalizar Pedido</button>
+        </div>
+    </div>
+
     <script>
         // Função para abrir o modal de login
         function openModal() {
@@ -95,9 +151,25 @@
         function closeModalCadastro() {
             document.getElementById("registerModal").style.display = "none";
         }
+
+        // Função para abrir o modal do carrinho
+        function openCartModal() {
+            document.getElementById("cartModal").style.display = "flex";
+            // Aqui você pode adicionar lógica para listar os produtos do carrinho
+        }
+
+        // Função para fechar o modal do carrinho
+        function closeCartModal() {
+            document.getElementById("cartModal").style.display = "none";
+        }
+
+        // Função para finalizar o pedido
+        function finalizeOrder() {
+            alert("Pedido finalizado com sucesso!");
+            // Aqui você pode redirecionar para a página de checkout ou adicionar lógica para processar o pedido
+            closeCartModal(); // Fecha o modal após finalizar o pedido
+        }
     </script>
 
 </body>
 </html>
-
-

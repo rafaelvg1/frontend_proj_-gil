@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
-
-BASE_URL = "https://insper-food-1-0oq8.onrender.com"
+from pages.login import post_login
 st.set_page_config(page_title="Insper Pay", layout="wide")
+BASE_URL = "https://insper-food-1-0oq8.onrender.com"
+
 
 # Função para buscar os pratos do cardápio
 def get_pratos(BASE_URL):

@@ -16,6 +16,30 @@ def get_pratos(BASE_URL):
         st.error("Erro ao buscar o cardápio")
         return []
 
+# Customizando o estilo do filtro com HTML e CSS
+st.markdown("""
+    <style>
+    .stRadio > label {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    div.stRadio > div > label > div {
+        background-color: #f0f0f5;
+        border-radius: 5px;
+        padding: 8px 16px;
+        margin-right: 8px;
+        transition: 0.3s ease;
+    }
+    div.stRadio > div > label > div:hover {
+        background-color: #dcdcdc;
+    }
+    div.stRadio > div > label input:checked + div {
+        background-color: #ff4b4b;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Configuração da interface
 left, mid, right = st.columns(3, vertical_alignment="center")
 with st.container():
@@ -46,26 +70,6 @@ with st.container():
             if st.button("🛒", use_container_width=True):
                 st.switch_page("pages/carrinho.py")
 
-# Filtros (exemplo simples)
-st.text("Filtros")
-col1, col2, col3, col4, col5 = st.columns(5, vertical_alignment="center")
-
-with col1:
-    if st.button("Sobremesas", use_container_width=True):
-        st.write("Sobremesas")
-with col2:
-    if st.button("Pratos", use_container_width=True):
-        st.write("Pratos")
-with col3:
-    if st.button("Bebidas", use_container_width=True):
-        st.write("Bebidas")
-with col4:
-    if st.button("Combos", use_container_width=True):
-        st.write("Combos")
-with col5:
-    if st.button("Outros", use_container_width=True):
-        st.write("Outros")
-
 # Busca os pratos do cardápio
 comidas = get_pratos(BASE_URL)
 
@@ -75,16 +79,32 @@ if pesquisa:
 else:
     comidas_filtradas = comidas
 
-# Exibição dos itens do cardápio
+# Exibindo o filtro estilizado
+st.text("Filtros")
+filtro_selecionado = st.radio(
+    "Escolha um filtro",
+    options=["Todos", "Sobremesas", "Pratos", "Bebidas"],
+    horizontal=True
+)
+
+# Mapeamento do filtro selecionado para o tipo correspondente
+tipo_map = {
+    "Todos": None,
+    "Sobremesas": "sobremesa",
+    "Pratos": "prato",
+    "Bebidas": "bebida",
+}
+tipo_filtrado = tipo_map[filtro_selecionado]
+
+# Exibe itens de acordo com o filtro selecionado
 st.divider()
 col_esquerda, col_direita = st.columns(2, vertical_alignment="center")
 
-# Conteúdo da área da direita
 with col_direita:
     contador = 0
     lista_comida_direita = []
     for comida in comidas_filtradas:
-        if contador % 2 == 1:
+        if (tipo_filtrado is None or comida["tipo"] == tipo_filtrado) and contador % 2 == 1:
             col_checkbox, col_nome = st.columns([1, 4])
             with col_checkbox:
                 selecionado = st.checkbox("", key=f"check_direita_{comida['nome']}")
@@ -96,12 +116,11 @@ with col_direita:
                 st.text(f"{comida['preco']} Reais")
         contador += 1
 
-# Conteúdo da área da esquerda
 with col_esquerda:
     contador = 0
     lista_comida_esquerda = []
     for comida in comidas_filtradas:
-        if contador % 2 == 0:
+        if (tipo_filtrado is None or comida["tipo"] == tipo_filtrado) and contador % 2 == 0:
             col_checkbox, col_nome = st.columns([1, 4])
             with col_checkbox:
                 selecionado = st.checkbox("", key=f"check_esquerda_{comida['nome']}")

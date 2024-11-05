@@ -1,7 +1,10 @@
-import streamlit as st  # Streamlit é utilizado para criar interfaces web 
-import requests  # Requests é utilizado para fazer requisições HTTP (GET, POST, etc.)
-BASE_URL="https://insper-food-1-0oq8.onrender.com"
-st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+import streamlit as st
+import requests
+
+BASE_URL = "https://insper-food-1-0oq8.onrender.com"
+st.set_page_config(page_title="Insper Pay", layout="wide")
+
+# Função para buscar os pratos do cardápio
 def get_pratos(BASE_URL):
     url = f"{BASE_URL}/cardapio"
     response = requests.get(url)
@@ -10,97 +13,119 @@ def get_pratos(BASE_URL):
         pratos = response.json()["itens_cardapio"]
         return pratos
     else:
-        st.error("Erro ao buscar usuários")
+        st.error("Erro ao buscar o cardápio")
         return []
 
-left, mid, right = st.columns(3,vertical_alignment="center")
+# Configuração da interface
+left, mid, right = st.columns(3, vertical_alignment="center")
 with st.container():
     st.divider()
     with left:
         st.title(":red[INSPER PAY]")
       
     with mid:
-        pesquisa=st.text_input("","pesquise aqui")
-        
+        # Campo de pesquisa
+        pesquisa = st.text_input("Pesquise aqui", placeholder="Digite o nome do prato")
+
     with right:
-        bt1,bt2,bt3=st.columns(3)
+        bt1, bt2, bt3 = st.columns(3)
         
         with bt1:
             st.write("")
             st.write("")
-            if st.button("login",use_container_width=True):
+            if st.button("login", use_container_width=True):
                 st.switch_page("pages/login.py")
         with bt2:
             st.write("")
             st.write("")
-            if st.button("cadastro",use_container_width=True):
+            if st.button("cadastro", use_container_width=True):
                 st.switch_page("pages/cadastro.py")
         with bt3:
             st.write("")
             st.write("")
-            if st.button("🛒",use_container_width=True):
+            if st.button("🛒", use_container_width=True):
                 st.switch_page("pages/carrinho.py")
 
-
+# Filtros (exemplo simples)
 st.text("Filtros")
-col1, col2, col3, col4, col5 = st.columns(5,vertical_alignment="center")
+col1, col2, col3, col4, col5 = st.columns(5, vertical_alignment="center")
 
 with col1:
-    st.write("")
-    if st.button("Sobremesas",use_container_width=True):
-        st.write("Comidas")
-        st.switch_page("pages/sobremesas.py")
-    # st.image("https://static.streamlit.io/examples/cat.jpg")
-    
-    
-
+    if st.button("Sobremesas", use_container_width=True):
+        st.write("Sobremesas")
 with col2:
-    st.write("")
-    if st.button("Pratos",use_container_width=True):
+    if st.button("Pratos", use_container_width=True):
         st.write("Pratos")
-    # st.image("https://static.streamlit.io/examples/dog.jpg")
-
-    
-
 with col3:
-    st.write("")
-    if st.button("Bebidas",use_container_width=True):
-        comidas=get_pratos(BASE_URL)
-        st.write(comidas)
-
+    if st.button("Bebidas", use_container_width=True):
+        st.write("Bebidas")
 with col4:
-    st.write("")
     if st.button("Combos", use_container_width=True):
-        st.write("Oi")
-
+        st.write("Combos")
 with col5:
-    st.write("")
-    if st.button("Sla",use_container_width=True):
-        st.write("oi")
-    # st.image("https://static.streamlit.io/examples/owl.jpg")
-import streamlit as st
-st.divider()
-# Cria duas colunas: uma para a área à esquerda e outra para a área à direita
-col_esquerda, col_direita = st.columns(2,vertical_alignment="center")
+    if st.button("Outros", use_container_width=True):
+        st.write("Outros")
 
-# Conteúdo da área da esquerda
-with col_esquerda:
-    st.subheader("Strogonoff de frango")
-    st.image("imgs/strogonoff.jpg" , width=300)  # Ajuste o tamanho conforme necessário
-    with st.expander("Mais detalhes"):
-        st.write('''
-       Descrição do produto.
-    ''')
+# Busca os pratos do cardápio
+comidas = get_pratos(BASE_URL)
+
+# Aplica o filtro de pesquisa
+if pesquisa:
+    comidas_filtradas = [comida for comida in comidas if pesquisa.lower() in comida["nome"].lower()]
+else:
+    comidas_filtradas = comidas
+
+# Exibição dos itens do cardápio
+st.divider()
+col_esquerda, col_direita = st.columns(2, vertical_alignment="center")
 
 # Conteúdo da área da direita
 with col_direita:
-    st.subheader("Área Direita")
-    # st.image("caminho_para_sua_imagem_direita.jpg", caption="Imagem à direita", width=150)  # Ajuste o tamanho conforme necessário
-    st.write("Texto descritivo para a área à direita.")
+    contador = 0
+    lista_comida_direita = []
+    for comida in comidas_filtradas:
+        if contador % 2 == 1:
+            col_checkbox, col_nome = st.columns([1, 4])
+            with col_checkbox:
+                selecionado = st.checkbox("", key=f"check_direita_{comida['nome']}")
+                if selecionado:
+                    lista_comida_direita.append(comida['codigo'])
+            with col_nome:
+                st.subheader(comida["nome"])
+                # st.image(f'imgs/{comida["nome"]}.jpg', width=250)
+                st.text(f"{comida['preco']} Reais")
+        contador += 1
 
+# Conteúdo da área da esquerda
+with col_esquerda:
+    contador = 0
+    lista_comida_esquerda = []
+    for comida in comidas_filtradas:
+        if contador % 2 == 0:
+            col_checkbox, col_nome = st.columns([1, 4])
+            with col_checkbox:
+                selecionado = st.checkbox("", key=f"check_esquerda_{comida['nome']}")
+                if selecionado:
+                    lista_comida_esquerda.append(comida['codigo'])
+            with col_nome:
+                st.subheader(comida["nome"])
+                # st.image(f'imgs/{comida["nome"]}.jpg', width=250)
+                st.text(f"{comida['preco']} Reais")
+        contador += 1
 
+# Coletando todos os itens selecionados
+itens_selecionados = lista_comida_esquerda + lista_comida_direita
 
-#funções:
-
-
-    
+# Botão fixo na parte inferior para concluir o pedido
+st.divider()
+with st.container():
+    if st.button("Concluir Pedido", use_container_width=True):
+        if itens_selecionados:
+            url_pedido = f"{BASE_URL}/pedidos"
+            response = requests.post(url_pedido, json={"codigos_itens": itens_selecionados})
+            if response.status_code == 201:
+                st.success("Pedido realizado com sucesso!")
+            else:
+                st.error("Erro ao enviar o pedido.")
+        else:
+            st.warning("Selecione ao menos um item para concluir o pedido.")

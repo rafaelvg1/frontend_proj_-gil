@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 from pages.login import post_login
 
-# Configuração da página (deve ser a primeira chamada do Streamlit)
+# Configura a página como o primeiro comando
 st.set_page_config(page_title="Insper Pay", layout="wide")
 
 BASE_URL = "https://insper-food-1-0oq8.onrender.com"
@@ -71,11 +71,11 @@ with st.container():
             st.write("")
             if st.button("cadastro", use_container_width=True):
                 st.switch_page("pages/cadastro.py")
-        with bt3:
-            st.write("")
-            st.write("")
-            if st.button("🛒", use_container_width=True):
-                st.switch_page("pages/carrinho.py")
+        # with bt3:
+        #     st.write("")
+        #     st.write("")
+        #     if st.button("🛒", use_container_width=True):
+        #         st.switch_page("pages/carrinho.py")
 
 # Busca os pratos do cardápio
 comidas = get_pratos(BASE_URL)
@@ -157,7 +157,7 @@ with st.container():
     if st.button("Concluir Pedido", use_container_width=True):
         # Verifica se o usuário está logado
         if not st.session_state.logged_in:
-            st.warning("Você precisa estar logado para concluir o pedido.")
+            st.warning("Você precisa estar logado para concluir o pedido.")  # Limpa parâmetros da URL
             st.markdown(
                 """
                 <script>

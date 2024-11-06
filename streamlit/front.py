@@ -17,6 +17,10 @@ def get_pratos(BASE_URL):
         st.error("Erro ao buscar o cardápio")
         return []
 
+# Inicializa o estado de login no session state se ainda não estiver definido
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False  # Define como False inicialmente
+
 # Inicializa a lista de itens selecionados no session state
 if "itens_selecionados" not in st.session_state:
     st.session_state.itens_selecionados = set()
@@ -34,9 +38,6 @@ st.markdown("""
         padding: 8px 16px;
         margin-right: 8px;
         transition: 0.3s ease;
-    }
-    div.stRadio > div > label > div:hover {
-        background-color: #dcdcdc;
     }
     div.stRadio > div > label input:checked + div {
         background-color: #ff4b4b;
@@ -152,7 +153,20 @@ with col_esquerda:
 st.divider()
 with st.container():
     if st.button("Concluir Pedido", use_container_width=True):
-        if st.session_state.itens_selecionados:
+        # Verifica se o usuário está logado
+        if not st.session_state.logged_in:
+            st.warning("Você precisa estar logado para concluir o pedido.")
+            # Redireciona para a página de login usando JavaScript
+            st.markdown(
+                """
+                <script>
+                    window.location.href = "pages/login.py";
+                </script>
+                """,
+                unsafe_allow_html=True
+            )
+        elif st.session_state.itens_selecionados:
+            # Se o usuário está logado, tenta enviar o pedido
             url_pedido = f"{BASE_URL}/pedidos"
             response = requests.post(url_pedido, json={"codigos_itens": list(st.session_state.itens_selecionados)})
             if response.status_code == 201:

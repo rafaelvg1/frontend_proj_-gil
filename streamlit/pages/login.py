@@ -14,6 +14,7 @@ def post_login(BASE_URL, usuario, senha):
 
     if response.status_code == 200:
         st.success("Login realizado com sucesso!")
+        st.session_state.logged_in = True  # Define o estado de login como True
         st.switch_page("front.py")
     elif response.status_code == 400:
         st.error(f"Erro: {response.json()['erro']}")
@@ -54,9 +55,7 @@ with col1:
     with log:
         # Botão de login
         if st.button("Login", use_container_width=True):
-            login = post_login(BASE_URL, usuario, senha)
-            if login == 201:
-                st.switch_page("pages/front.py")
+            post_login(BASE_URL, usuario, senha)
     with back:
         if st.button("Voltar", use_container_width=True):
             st.switch_page("front.py")

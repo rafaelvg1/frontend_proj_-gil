@@ -113,7 +113,7 @@ with col_direita:
                     lista_comida_direita.append(comida['codigo'])
             with col_nome:
                 st.subheader(comida["nome"])
-                # st.image(f'imgs/{comida["nome"]}.jpg', width=250)
+                st.image(f'imgs/{comida["nome"]}.jpg', width=250)
                 st.text(f"{comida['preco']} Reais")
         contador += 1
 
@@ -129,7 +129,7 @@ with col_esquerda:
                     lista_comida_esquerda.append(comida['codigo'])
             with col_nome:
                 st.subheader(comida["nome"])
-                # st.image(f'imgs/{comida["nome"]}.jpg', width=250)
+                st.image(f'imgs/{comida["nome"]}.jpg', width=250)
                 st.text(f"{comida['preco']} Reais")
         contador += 1
 

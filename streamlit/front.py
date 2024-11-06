@@ -112,6 +112,8 @@ with col_direita:
                 if selecionado:
                     lista_comida_direita.append(comida['codigo'])
             with col_nome:
+                st.write()
+                st.write()
                 st.subheader(comida["nome"])
                 st.image(f'imgs/{comida["nome"]}.jpg', width=250)
                 st.text(f"{comida['preco']} Reais")
@@ -128,6 +130,7 @@ with col_esquerda:
                 if selecionado:
                     lista_comida_esquerda.append(comida['codigo'])
             with col_nome:
+                st.write("")
                 st.subheader(comida["nome"])
                 st.image(f'imgs/{comida["nome"]}.jpg', width=250)
                 st.text(f"{comida['preco']} Reais")

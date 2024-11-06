@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+st.set_page_config(page_title="Insper Pay", layout="centered")
 BASE_URL="https://insper-food-1-0oq8.onrender.com"
 def post_cadastro(BASE_URL, nome, email, nome_usuario,senha,):
     data = {

@@ -17,7 +17,7 @@ def post_login(BASE_URL, usuario, senha):
         st.session_state.logged_in = True  # Define o estado de login como True
         st.switch_page("front.py")
     elif response.status_code == 400:
-        st.error(f"Erro: {response.json()['erro']}")
+        st.error("Erro ao fazer login, verique se você informou corretamente os dados")
     else:
         st.error(f"Erro desconhecido: {response.text}")
 

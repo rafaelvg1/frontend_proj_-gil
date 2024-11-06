@@ -155,8 +155,7 @@ with st.container():
     if st.button("Concluir Pedido", use_container_width=True):
         # Verifica se o usuário está logado
         if not st.session_state.logged_in:
-            st.warning("Você precisa estar logado para concluir o pedido.")
-            # Redireciona para a página de login usando JavaScript
+            st.warning("Você precisa estar logado para concluir o pedido.")  # Limpa parâmetros da URL
             st.markdown(
                 """
                 <script>

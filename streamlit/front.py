@@ -1,9 +1,9 @@
 import streamlit as st
 import requests
 from pages.login import post_login
+
 st.set_page_config(page_title="Insper Pay", layout="wide")
 BASE_URL = "https://insper-food-1-0oq8.onrender.com"
-
 
 # Função para buscar os pratos do cardápio
 def get_pratos(BASE_URL):
@@ -16,6 +16,10 @@ def get_pratos(BASE_URL):
     else:
         st.error("Erro ao buscar o cardápio")
         return []
+
+# Inicializa a lista de itens selecionados no session state
+if "itens_selecionados" not in st.session_state:
+    st.session_state.itens_selecionados = set()
 
 # Customizando o estilo do filtro com HTML e CSS
 st.markdown("""
@@ -49,7 +53,6 @@ with st.container():
         st.title(":red[INSPER PAY]")
       
     with mid:
-        # Campo de pesquisa
         pesquisa = st.text_input("Pesquise aqui", placeholder="Digite o nome do prato")
 
     with right:
@@ -103,49 +106,55 @@ col_esquerda, col_direita = st.columns(2, vertical_alignment="center")
 
 with col_direita:
     contador = 0
-    lista_comida_direita = []
     for comida in comidas_filtradas:
         if (tipo_filtrado is None or comida["tipo"] == tipo_filtrado) and contador % 2 == 1:
             col_checkbox, col_nome = st.columns([1, 4])
             with col_checkbox:
-                selecionado = st.checkbox("", key=f"check_direita_{comida['nome']}")
+                selecionado = st.checkbox(
+                    "", 
+                    key=f"check_direita_{comida['nome']}",
+                    value=comida['codigo'] in st.session_state.itens_selecionados
+                )
                 if selecionado:
-                    lista_comida_direita.append(comida['codigo'])
+                    st.session_state.itens_selecionados.add(comida['codigo'])
+                else:
+                    st.session_state.itens_selecionados.discard(comida['codigo'])
             with col_nome:
                 st.write()
-                st.write()
                 st.subheader(comida["nome"])
-                st.image(f'imgs/{comida["nome"]}.jpg', width=250)
+                st.image(f'streamlit/imgs/{comida["nome"]}.jpg', width=250)
                 st.text(f"{comida['preco']} Reais")
         contador += 1
 
 with col_esquerda:
     contador = 0
-    lista_comida_esquerda = []
     for comida in comidas_filtradas:
         if (tipo_filtrado is None or comida["tipo"] == tipo_filtrado) and contador % 2 == 0:
             col_checkbox, col_nome = st.columns([1, 4])
             with col_checkbox:
-                selecionado = st.checkbox("", key=f"check_esquerda_{comida['nome']}")
+                selecionado = st.checkbox(
+                    "", 
+                    key=f"check_esquerda_{comida['nome']}",
+                    value=comida['codigo'] in st.session_state.itens_selecionados
+                )
                 if selecionado:
-                    lista_comida_esquerda.append(comida['codigo'])
+                    st.session_state.itens_selecionados.add(comida['codigo'])
+                else:
+                    st.session_state.itens_selecionados.discard(comida['codigo'])
             with col_nome:
                 st.write("")
                 st.subheader(comida["nome"])
-                st.image(f'imgs/{comida["nome"]}.jpg', width=250)
+                st.image(f'streamlit/imgs/{comida["nome"]}.jpg', width=250)
                 st.text(f"{comida['preco']} Reais")
         contador += 1
-
-# Coletando todos os itens selecionados
-itens_selecionados = lista_comida_esquerda + lista_comida_direita
 
 # Botão fixo na parte inferior para concluir o pedido
 st.divider()
 with st.container():
     if st.button("Concluir Pedido", use_container_width=True):
-        if itens_selecionados:
+        if st.session_state.itens_selecionados:
             url_pedido = f"{BASE_URL}/pedidos"
-            response = requests.post(url_pedido, json={"codigos_itens": itens_selecionados})
+            response = requests.post(url_pedido, json={"codigos_itens": list(st.session_state.itens_selecionados)})
             if response.status_code == 201:
                 st.success("Pedido realizado com sucesso!")
             else:

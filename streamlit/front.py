@@ -69,11 +69,11 @@ with st.container():
             st.write("")
             if st.button("cadastro", use_container_width=True):
                 st.switch_page("pages/cadastro.py")
-        with bt3:
-            st.write("")
-            st.write("")
-            if st.button("🛒", use_container_width=True):
-                st.switch_page("pages/carrinho.py")
+        # with bt3:
+        #     st.write("")
+        #     st.write("")
+        #     if st.button("🛒", use_container_width=True):
+        #         st.switch_page("pages/carrinho.py")
 
 # Busca os pratos do cardápio
 comidas = get_pratos(BASE_URL)

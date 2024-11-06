@@ -2,7 +2,9 @@ import streamlit as st
 import requests
 from pages.login import post_login
 
+# Configuração da página (deve ser a primeira chamada do Streamlit)
 st.set_page_config(page_title="Insper Pay", layout="wide")
+
 BASE_URL = "https://insper-food-1-0oq8.onrender.com"
 
 # Função para buscar os pratos do cardápio
@@ -155,7 +157,7 @@ with st.container():
     if st.button("Concluir Pedido", use_container_width=True):
         # Verifica se o usuário está logado
         if not st.session_state.logged_in:
-            st.warning("Você precisa estar logado para concluir o pedido.")  # Limpa parâmetros da URL
+            st.warning("Você precisa estar logado para concluir o pedido.")
             st.markdown(
                 """
                 <script>

@@ -14,7 +14,6 @@ def post_login(BASE_URL, usuario, senha):
     if response.status_code == 200:
         st.success("Login realizado com sucesso!")
         st.session_state.logged_in = True  # Define o estado de login como True
-        st.switch_page("front.py")
     elif response.status_code == 400:
         st.error("Erro ao fazer login, verifique se você informou corretamente os dados")
     else:
@@ -29,9 +28,7 @@ def post_colaborador(BASE_URL, usuario, senha):
 
     if response.status_code == 200:
         st.success("Autenticação de colaborador realizada com sucesso!")
-
-        # Redirecionamento para o URL externo usando JavaScript dentro do Streamlit
-        st.experimental_set_query_params()
+        # Redirecionamento externo
         st.markdown(
             """
             <meta http-equiv="refresh" content="0; url=https://hhenriquen-frontend-restaurante-front-restaurante-gklqi8.streamlit.app/" />
@@ -50,20 +47,18 @@ def run():
     usuario = st.text_input("Nome de Usuário")
     senha = st.text_input("Senha", type="password")
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        log, back = st.columns(2)
-        with log:
-            # Botão de login
-            if st.button("Login", use_container_width=True):
-                post_login(BASE_URL, usuario, senha)
-        with back:
-            if st.button("Voltar", use_container_width=True):
-                st.switch_page("front.py")
-    with col2:
-        if st.button("Não tenho cadastro", use_container_width=False):
-            st.switch_page("pages/cadastro.py")
-    with col3:
-        # Botão "Sou colaborador" com redirecionamento
-        if st.button("Sou colaborador", use_container_width=True):
-            post_colaborador(BASE_URL, usuario, senha)
+    # Botão de login
+    if st.button("Login", use_container_width=True):
+        post_login(BASE_URL, usuario, senha)
+
+    # Botão para redirecionar para a página de cadastro
+    if st.button("Não tenho cadastro", use_container_width=True):
+        st.session_state.page = "cadastro"  # Define o estado da página para 'cadastro'
+    
+    # Botão para autenticação de colaborador
+    if st.button("Sou colaborador", use_container_width=True):
+        post_colaborador(BASE_URL, usuario, senha)
+
+    # Botão para voltar para a página inicial
+    if st.button("Voltar", use_container_width=True):
+        st.session_state.page = "Página Inicial"

@@ -70,7 +70,7 @@ def run():
                         key=f"check_{comida['codigo']}",
                         value=comida['codigo'] in st.session_state.itens_selecionados
                     )
-                    st.image(f'streamlit/imgs/{comida["nome"]}.jpg', width=250)
+                    # st.image(f'streamlit/imgs/{comida["nome"]}.jpg', width=250)
                     if selecionado:
                         st.session_state.itens_selecionados.add(comida['codigo'])
                     else:
@@ -90,7 +90,7 @@ def run():
                         value=comida['codigo'] in st.session_state.itens_selecionados
                     
                     )
-                    st.image(f'streamlit/imgs/{comida["nome"]}.jpg', width=250)
+                    # st.image(f'streamlit/imgs/{comida["nome"]}.jpg', width=250)
                     if selecionado:
                         st.session_state.itens_selecionados.add(comida['codigo'])
                     else:

@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 from requests.auth import HTTPBasicAuth
 
-st.set_page_config(page_title="Insper Pay", layout="centered")
 BASE_URL = "https://insper-food-1-0oq8.onrender.com"
 
 # Função para login normal
@@ -17,7 +16,7 @@ def post_login(BASE_URL, usuario, senha):
         st.session_state.logged_in = True  # Define o estado de login como True
         st.switch_page("front.py")
     elif response.status_code == 400:
-        st.error("Erro ao fazer login, verique se você informou corretamente os dados")
+        st.error("Erro ao fazer login, verifique se você informou corretamente os dados")
     else:
         st.error(f"Erro desconhecido: {response.text}")
 
@@ -42,27 +41,29 @@ def post_colaborador(BASE_URL, usuario, senha):
     else:
         st.error("Falha na autenticação de colaborador.")
 
-# Título da página
-st.title("Página de Login")
+# Função principal para a página de login
+def run():
+    # Título da página
+    st.title("Página de Login")
 
-# Campos de entrada para o login
-usuario = st.text_input("Nome de Usuário")
-senha = st.text_input("Senha", type="password")
+    # Campos de entrada para o login
+    usuario = st.text_input("Nome de Usuário")
+    senha = st.text_input("Senha", type="password")
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    log, back = st.columns(2)
-    with log:
-        # Botão de login
-        if st.button("Login", use_container_width=True):
-            post_login(BASE_URL, usuario, senha)
-    with back:
-        if st.button("Voltar", use_container_width=True):
-            st.switch_page("front.py")
-with col2:
-    if st.button("Não tenho cadastro", use_container_width=False):
-        st.switch_page("pages/cadastro.py")
-with col3:
-    # Botão "Sou colaborador" com redirecionamento
-    if st.button("Sou colaborador", use_container_width=True):
-        post_colaborador(BASE_URL, usuario, senha)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        log, back = st.columns(2)
+        with log:
+            # Botão de login
+            if st.button("Login", use_container_width=True):
+                post_login(BASE_URL, usuario, senha)
+        with back:
+            if st.button("Voltar", use_container_width=True):
+                st.switch_page("front.py")
+    with col2:
+        if st.button("Não tenho cadastro", use_container_width=False):
+            st.switch_page("pages/cadastro.py")
+    with col3:
+        # Botão "Sou colaborador" com redirecionamento
+        if st.button("Sou colaborador", use_container_width=True):
+            post_colaborador(BASE_URL, usuario, senha)
